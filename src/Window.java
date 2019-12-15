@@ -16,10 +16,8 @@ public class Window extends JFrame implements ActionListener
     public Window()
     {
         frame = new JFrame("mattpad");
-        menuBar = new JMenuBar();
 
-        setupFileMenu();
-        setupEditMenu();
+        setupMenuBar();
 
         frame.setJMenuBar(menuBar);
         frame.setSize(500,500);
@@ -30,6 +28,15 @@ public class Window extends JFrame implements ActionListener
     // ------------------------------------------------------
     // Setup Menus
     // ------------------------------------------------------
+    private void setupMenuBar()
+    {
+        menuBar = new JMenuBar();
+
+        setupFileMenu();
+        setupEditMenu();
+        setupUndoButtons();
+    }
+
     private void setupFileMenu()
     {
         JMenu fileMenu = new JMenu("File");
@@ -70,6 +77,16 @@ public class Window extends JFrame implements ActionListener
 
         menuBar.add(editMenu);
     }
+
+    private void setupUndoButtons()
+    {
+        JButton undoButton = new JButton("Undo");
+        JButton redoButton = new JButton("Redo");
+
+        menuBar.add(undoButton);
+        menuBar.add(redoButton);
+    }
+
 
     // ------------------------------------------------------
     // Action Performed
