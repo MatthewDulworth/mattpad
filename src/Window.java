@@ -41,6 +41,7 @@ public class Window extends JFrame implements ActionListener
         JMenuItem saveItem = new JMenuItem("Save");
         JMenuItem openItem = new JMenuItem("Save");
         JMenuItem newItem = new JMenuItem("Save");
+        JMenuItem newItem2 = new JMenuItem("Save2");
 
         saveItem.addActionListener(this);
 
