@@ -1,6 +1,9 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 public class Window extends JFrame implements ActionListener
 {
@@ -9,6 +12,7 @@ public class Window extends JFrame implements ActionListener
     // ------------------------------------------------------
     private JFrame frame;
     private JMenuBar menuBar;
+    private JPanel contentPane;
 
     // ------------------------------------------------------
     // Constructor
@@ -18,15 +22,16 @@ public class Window extends JFrame implements ActionListener
         frame = new JFrame("mattpad");
 
         setupMenuBar();
+        setupContentPane();
 
-        frame.setJMenuBar(menuBar);
-        frame.setSize(500,500);
-        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(400, 400));
+        frame.pack();
+        frame.setVisible(true);
     }
 
     // ------------------------------------------------------
-    // Setup Menus
+    // Menu Bar
     // ------------------------------------------------------
     private void setupMenuBar()
     {
@@ -35,6 +40,8 @@ public class Window extends JFrame implements ActionListener
         setupFileMenu();
         setupEditMenu();
         setupUndoButtons();
+
+        frame.setJMenuBar(menuBar);
     }
 
     private void setupFileMenu()
@@ -87,6 +94,28 @@ public class Window extends JFrame implements ActionListener
         menuBar.add(redoButton);
     }
 
+    // ------------------------------------------------------
+    // Content Pane
+    // ------------------------------------------------------
+    private void setupContentPane()
+    {
+        contentPane = new JPanel();
+        contentPane.setLayout(new FlowLayout());
+
+        setupTextArea();
+
+        frame.setContentPane(contentPane);
+    }
+
+    private void setupTextArea()
+    {
+        JTextArea textArea = new JTextArea(30, 40);
+        textArea.setLineWrap(true);
+
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        contentPane.add(scrollPane);
+    }
 
     // ------------------------------------------------------
     // Action Performed
