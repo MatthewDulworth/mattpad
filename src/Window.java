@@ -7,22 +7,19 @@ public class Window extends JFrame implements ActionListener
     // ------------------------------------------------------
     // Member Vars
     // ------------------------------------------------------
-    JFrame frame;
-    JTextArea textArea;
-    JMenuBar menuBar;
+    private JFrame frame;
+    private JMenuBar menuBar;
 
     // ------------------------------------------------------
     // Constructor
     // ------------------------------------------------------
-    Window()
+    public Window()
     {
         frame = new JFrame("mattpad");
-        textArea = new JTextArea();
         menuBar = new JMenuBar();
 
-
-
-        setupMenu();
+        setupFileMenu();
+        setupEditMenu();
 
         frame.setJMenuBar(menuBar);
         frame.setSize(500,500);
@@ -31,28 +28,47 @@ public class Window extends JFrame implements ActionListener
     }
 
     // ------------------------------------------------------
-    // Menu
+    // Setup Menus
     // ------------------------------------------------------
-    private void setupMenu()
+    private void setupFileMenu()
     {
-        // File Menu
         JMenu fileMenu = new JMenu("File");
 
         JMenuItem saveItem = new JMenuItem("Save");
-        JMenuItem openItem = new JMenuItem("Save");
-        JMenuItem newItem = new JMenuItem("Save");
-        JMenuItem newItem2 = new JMenuItem("Save2");
+        JMenuItem openItem = new JMenuItem("Open");
+        JMenuItem newItem = new JMenuItem("New");
 
         saveItem.addActionListener(this);
+        openItem.addActionListener(this);
+        newItem.addActionListener(this);
 
-
-
-
-        // Edit Menu
-
-
+        fileMenu.add(saveItem);
+        fileMenu.add(openItem);
+        fileMenu.add(newItem);
 
         menuBar.add(fileMenu);
+    }
+
+    private void setupEditMenu()
+    {
+        JMenu editMenu = new JMenu("Edit");
+
+        JMenuItem cutItem = new JMenuItem("Cut");
+        JMenuItem copyItem = new JMenuItem("Copy");
+        JMenuItem pasteItem = new JMenuItem("Paste");
+        JMenuItem printItem = new JMenuItem("Print");
+
+        cutItem.addActionListener(this);
+        copyItem.addActionListener(this);
+        pasteItem.addActionListener(this);
+        printItem.addActionListener(this);
+
+        editMenu.add(cutItem);
+        editMenu.add(copyItem);
+        editMenu.add(pasteItem);
+        editMenu.add(printItem);
+
+        menuBar.add(editMenu);
     }
 
     // ------------------------------------------------------
