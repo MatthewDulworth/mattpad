@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 @SuppressWarnings("DuplicatedCode")
 public class Application extends JFrame
@@ -12,6 +13,7 @@ public class Application extends JFrame
     private JFrame frame;
     private JMenuBar menuBar;
     private JPanel contentPane;
+    private JTextArea textArea;
 
     // ------------------------------------------------------
     // Constructor
@@ -51,21 +53,9 @@ public class Application extends JFrame
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem newItem = new JMenuItem("New");
 
-        saveItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        openItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        newItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
+        saveItem.addActionListener(e -> FileHandler.save(textArea.toString()));
+        openItem.addActionListener(e -> FileHandler.openFile());
+        newItem.addActionListener(e -> FileHandler.newFile());
 
         fileMenu.add(saveItem);
         fileMenu.add(openItem);
@@ -135,7 +125,7 @@ public class Application extends JFrame
 
     private void setupTextArea()
     {
-        JTextArea textArea = new JTextArea(30, 40);
+        textArea = new JTextArea(30, 40);
         textArea.setLineWrap(true);
 
         JScrollPane scrollPane = new JScrollPane(textArea);
