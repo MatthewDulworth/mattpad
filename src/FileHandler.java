@@ -1,32 +1,98 @@
-import sun.lwawt.macosx.CSystemTray;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
+@SuppressWarnings("DuplicatedCode")
 public class FileHandler
 {
-    private static String HOME = System.getProperty("user.home");
-    private static Path currentFile;
-    private static JTextArea textArea;
+    private static File currentFile;
 
-    public static void Save()
+    public static boolean saveFileExists()
     {
-        if(currentFile != null)
+        return (currentFile != null);
+    }
+
+    public static void saveAs(String contents)
+    {
+        currentFile = getSaveFileFromChooser();
+        save(contents);
+    }
+
+    public static void save(String contents)
+    {
+        FileWriter fileWriter = null;
+
+        if(saveFileExists())
         {
-            textArea.getText();
+            try
+            {
+                fileWriter = new FileWriter(currentFile);
+                fileWriter.write(contents);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    fileWriter.close();
+                }
+                catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else
+        {
+            saveAs(contents);
         }
     }
 
-    public static void Load(String filepath)
+    @Nullable
+    private static File getSaveFileFromChooser()
     {
-        Save();
-        currentFile = Paths.get(filepath);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save As");
+        int result = fileChooser.showSaveDialog(null);
+        File fileToSave = null;
+
+        if(result == JFileChooser.APPROVE_OPTION)
+        {
+            fileToSave = fileChooser.getSelectedFile();
+            System.out.println(fileToSave.getAbsolutePath());
+        }
+        return fileToSave;
     }
 
-    public static void New()
+    @Nullable
+    private static File getOpenFileFromChooser()
     {
-        Save();
-        currentFile = Paths.get("file.txt");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save As");
+        int result = fileChooser.showSaveDialog(null);
+        File fileToSave = null;
+
+        if(result == JFileChooser.APPROVE_OPTION)
+        {
+            fileToSave = fileChooser.getSelectedFile();
+            System.out.println(fileToSave.getAbsolutePath());
+        }
+        return fileToSave;
+    }
+
+    public static void openFile()
+    {
+
+    }
+
+    public static void newFile()
+    {
+
     }
 }
