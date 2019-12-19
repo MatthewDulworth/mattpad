@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 @SuppressWarnings("DuplicatedCode")
 public class Application extends JFrame
@@ -53,7 +52,7 @@ public class Application extends JFrame
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem newItem = new JMenuItem("New");
 
-        saveItem.addActionListener(e -> FileHandler.save(textArea.toString()));
+        saveItem.addActionListener(e -> FileHandler.save(textArea.getText()));
         openItem.addActionListener(e -> FileHandler.openFile());
         newItem.addActionListener(e -> FileHandler.newFile());
 
@@ -136,7 +135,7 @@ public class Application extends JFrame
     // ------------------------------------------------------
     // Main Method
     // ------------------------------------------------------
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         new Application();
     }

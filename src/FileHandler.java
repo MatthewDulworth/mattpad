@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.Nullable;
-
 import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
@@ -54,7 +52,6 @@ public class FileHandler
         }
     }
 
-    @Nullable
     private static File getSaveFileFromChooser()
     {
         JFileChooser fileChooser = new JFileChooser();
@@ -65,12 +62,10 @@ public class FileHandler
         if(result == JFileChooser.APPROVE_OPTION)
         {
             fileToSave = fileChooser.getSelectedFile();
-            System.out.println(fileToSave.getAbsolutePath());
         }
         return fileToSave;
     }
 
-    @Nullable
     private static File getOpenFileFromChooser()
     {
         JFileChooser fileChooser = new JFileChooser();
