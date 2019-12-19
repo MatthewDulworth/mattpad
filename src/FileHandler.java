@@ -6,32 +6,34 @@ import java.io.IOException;
 @SuppressWarnings("DuplicatedCode")
 public class FileHandler
 {
+    // ------------------------------------------------------
+    // Member Vars
+    // ------------------------------------------------------
     private static File currentFile;
+    private static JTextArea textArea;
 
-    public static boolean saveFileExists()
-    {
-        return (currentFile != null);
-    }
-
-    public static void saveAs(String contents)
+    // ------------------------------------------------------
+    // Save Methods
+    // ------------------------------------------------------
+    public static void saveAs()
     {
         currentFile = getSaveFileFromChooser();
         if(currentFile != null)
         {
-            save(contents);
+            save();
         }
     }
 
-    public static void save(String contents)
+    public static void save()
     {
         FileWriter fileWriter = null;
 
-        if(saveFileExists())
+        if(currentFile != null)
         {
             try
             {
                 fileWriter = new FileWriter(currentFile);
-                fileWriter.write(contents);
+                fileWriter.write(textArea.getText());
             }
             catch (IOException e)
             {
@@ -51,10 +53,14 @@ public class FileHandler
         }
         else
         {
-            saveAs(contents);
+            saveAs();
         }
     }
 
+
+    // ------------------------------------------------------
+    // Get File Dialogs
+    // ------------------------------------------------------
     private static File getSaveFileFromChooser()
     {
         JFileChooser fileChooser = new JFileChooser();
@@ -84,24 +90,48 @@ public class FileHandler
         return fileToSave;
     }
 
+
+    // ------------------------------------------------------
+    // Open File
+    // ------------------------------------------------------
     public static void openFile()
     {
-        String[] options = {"Save", "Cancel"};
+        showSaveFileDialog();
+    }
+
+    private static void showSaveFileDialog()
+    {
+        String[] options = {"Save","Don't Save" ,"Cancel"};
         int input = JOptionPane.showOptionDialog(
-            null,
+                null,
                 "Save work before opening new file?",
-                "Save",
+                "Save work?",
                 JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
+                JOptionPane.QUESTION_MESSAGE,
                 null,
                 options,
                 options[0]
         );
-        System.out.println(options[input]);
+        if(input == 0)
+        {
+            save();
+        }
     }
 
+
+    // ------------------------------------------------------
+    // New File
+    // ------------------------------------------------------
     public static void newFile()
     {
 
+    }
+
+    // ------------------------------------------------------
+    // Setter
+    // ------------------------------------------------------
+    public static void setTextArea(JTextArea textArea)
+    {
+        FileHandler.textArea = textArea;
     }
 }

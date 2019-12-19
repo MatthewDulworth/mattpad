@@ -52,7 +52,7 @@ public class MattPad extends JFrame
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem newItem = new JMenuItem("New");
 
-        saveItem.addActionListener(e -> FileHandler.save(textArea.getText()));
+        saveItem.addActionListener(e -> FileHandler.save());
         openItem.addActionListener(e -> FileHandler.openFile());
         newItem.addActionListener(e -> FileHandler.newFile());
 
