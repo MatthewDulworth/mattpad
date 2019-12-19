@@ -16,7 +16,10 @@ public class FileHandler
     public static void saveAs(String contents)
     {
         currentFile = getSaveFileFromChooser();
-        save(contents);
+        if(currentFile != null)
+        {
+            save(contents);
+        }
     }
 
     public static void save(String contents)
@@ -83,7 +86,18 @@ public class FileHandler
 
     public static void openFile()
     {
-
+        String[] options = {"Save", "Cancel"};
+        int input = JOptionPane.showOptionDialog(
+            null,
+                "Save work before opening new file?",
+                "Save",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        System.out.println(options[input]);
     }
 
     public static void newFile()

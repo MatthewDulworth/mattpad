@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @SuppressWarnings("DuplicatedCode")
-public class Application extends JFrame
+public class MattPad extends JFrame
 {
     // ------------------------------------------------------
     // Member Vars
@@ -17,7 +17,7 @@ public class Application extends JFrame
     // ------------------------------------------------------
     // Constructor
     // ------------------------------------------------------
-    public Application()
+    public MattPad()
     {
         frame = new JFrame("mattpad");
 
@@ -137,6 +137,6 @@ public class Application extends JFrame
     // ------------------------------------------------------
     public static void main(String[] args)
     {
-        new Application();
+        new MattPad();
     }
 }
