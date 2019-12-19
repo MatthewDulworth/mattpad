@@ -15,16 +15,21 @@ public class FileHandler
     // ------------------------------------------------------
     // Save Methods
     // ------------------------------------------------------
-    public static void saveAs()
+    public static boolean saveAs()
     {
         currentFile = getSaveFileFromChooser();
         if(currentFile != null)
         {
             save();
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
-    public static void save()
+    public static boolean save()
     {
         FileWriter fileWriter = null;
 
@@ -43,6 +48,7 @@ public class FileHandler
             {
                 try
                 {
+                    assert fileWriter != null;
                     fileWriter.close();
                 }
                 catch(IOException e)
@@ -50,10 +56,11 @@ public class FileHandler
                     e.printStackTrace();
                 }
             }
+            return true;
         }
         else
         {
-            saveAs();
+            return saveAs();
         }
     }
 
@@ -70,9 +77,53 @@ public class FileHandler
 
         if(result == JFileChooser.APPROVE_OPTION)
         {
-            fileToSave = fileChooser.getSelectedFile();
+            String filename = makeFileTXT(fileChooser.getSelectedFile().getName());
+            String filepath = fileChooser.getSelectedFile().getParent() + '/' + filename;
+            System.out.println(filepath);
+            fileToSave = new File(filepath);
         }
         return fileToSave;
+    }
+
+    private static String makeFileTXT(String filename)
+    {
+        if(filename.contains(".txt"))
+        {
+            return filename;
+        }
+        else if(filename.contains("."))
+        {
+            char[] nameArray = new char[filename.length()];
+
+            for(int i=0; i<filename.length(); i++)
+            {
+                if(filename.charAt(i) != '.')
+                {
+                    nameArray[i] = filename.charAt(i);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            StringBuilder str = new StringBuilder();
+            for(char c: nameArray)
+            {
+                if(c != '\u0000')
+                {
+                    str.append(c);
+                }
+            }
+            str.append(".txt");
+
+            return str.toString();
+        }
+        else
+        {
+            filename = filename + (".txt");
+            return filename;
+        }
     }
 
     private static File getOpenFileFromChooser()
@@ -96,10 +147,10 @@ public class FileHandler
     // ------------------------------------------------------
     public static void openFile()
     {
-        showSaveFileDialog();
+        System.out.println(showSaveFileDialog());
     }
 
-    private static void showSaveFileDialog()
+    private static boolean showSaveFileDialog()
     {
         String[] options = {"Save","Don't Save" ,"Cancel"};
         int input = JOptionPane.showOptionDialog(
@@ -114,8 +165,10 @@ public class FileHandler
         );
         if(input == 0)
         {
-            save();
+            return save();
         }
+
+        return (input == 1);
     }
 
 
