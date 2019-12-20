@@ -2,7 +2,11 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.print.PrinterException;
+import java.io.File;
 
 public class MattPad extends JFrame
 {
@@ -26,10 +30,20 @@ public class MattPad extends JFrame
 
         FileHandler.setTextArea(textArea);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 400));
         frame.pack();
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                if(FileHandler.checkSaves())
+                {
+                    frame.dispose();
+                    System.exit(0);
+                }
+            }
+        });
     }
 
     // ------------------------------------------------------
@@ -130,9 +144,9 @@ public class MattPad extends JFrame
         textArea.setLineWrap(true);
 
         textArea.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { onEdit(); }
-            public void removeUpdate(DocumentEvent e) { onEdit(); }
-            public void changedUpdate(DocumentEvent e) { onEdit(); }
+            @Override public void insertUpdate(DocumentEvent e) { onEdit(); }
+            @Override public void removeUpdate(DocumentEvent e) { onEdit(); }
+            @Override public void changedUpdate(DocumentEvent e) { onEdit(); }
         });
 
         JScrollPane scrollPane = new JScrollPane(textArea);
