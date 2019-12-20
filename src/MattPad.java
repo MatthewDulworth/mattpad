@@ -28,7 +28,7 @@ public class MattPad extends JFrame
         setupMenuBar();
         setupContentPane();
 
-        FileHandler.setTextArea(textArea);
+        FileHandler.init(textArea, frame);
 
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setMinimumSize(new Dimension(400, 400));

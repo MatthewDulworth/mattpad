@@ -16,6 +16,7 @@ public class FileHandler
     private static File currentFile;
     private static String lastSaveSnapshot = "";
     private static JTextArea textArea;
+    private static JFrame parentFrame;
 
 
     // ------------------------------------------------------
@@ -79,7 +80,7 @@ public class FileHandler
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save As");
-        int result = fileChooser.showSaveDialog(null);
+        int result = fileChooser.showSaveDialog(parentFrame);
         File fileToSave = null;
 
         if(result == JFileChooser.APPROVE_OPTION)
@@ -98,7 +99,7 @@ public class FileHandler
         FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("txt files (*.txt)", "txt");
         fileChooser.setFileFilter(txtFilter);
 
-        int result = fileChooser.showOpenDialog(null);
+        int result = fileChooser.showOpenDialog(parentFrame);
         File fileToOpen = null;
 
         if(result == JFileChooser.APPROVE_OPTION)
@@ -112,7 +113,7 @@ public class FileHandler
     {
         String[] options = {"Save","Don't Save" ,"Cancel"};
         int input = JOptionPane.showOptionDialog(
-                null,
+                parentFrame,
                 "Save work before opening new file?",
                 "Save work?",
                 JOptionPane.DEFAULT_OPTION,
@@ -158,12 +159,13 @@ public class FileHandler
             if(saveAs())
             {
                 textArea.setText("");
+                save();
             }
-            else
+            else if(oldFile != null)
             {
                 currentFile = oldFile;
+                save();
             }
-            save();
         }
     }
 
@@ -183,9 +185,10 @@ public class FileHandler
         }
     }
 
-    public static void setTextArea(JTextArea textArea)
+    public static void init(JTextArea textArea, JFrame parentFrame)
     {
         FileHandler.textArea = textArea;
+        FileHandler.parentFrame = parentFrame;
     }
 
     private static String makeFileTXT(String filename)
