@@ -1,7 +1,11 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.stream.Stream;
 
 @SuppressWarnings("DuplicatedCode")
 public class FileHandler
@@ -79,7 +83,6 @@ public class FileHandler
         {
             String filename = makeFileTXT(fileChooser.getSelectedFile().getName());
             String filepath = fileChooser.getSelectedFile().getParent() + '/' + filename;
-            System.out.println(filepath);
             fileToSave = new File(filepath);
         }
         return fileToSave;
@@ -129,16 +132,18 @@ public class FileHandler
     private static File getOpenFileFromChooser()
     {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save As");
-        int result = fileChooser.showSaveDialog(null);
-        File fileToSave = null;
+        fileChooser.setDialogTitle("Open File");
+        FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("txt files (*.txt)", "txt");
+        fileChooser.setFileFilter(txtFilter);
+
+        int result = fileChooser.showOpenDialog(null);
+        File fileToOpen = null;
 
         if(result == JFileChooser.APPROVE_OPTION)
         {
-            fileToSave = fileChooser.getSelectedFile();
-            System.out.println(fileToSave.getAbsolutePath());
+            fileToOpen = fileChooser.getSelectedFile();
         }
-        return fileToSave;
+        return fileToOpen;
     }
 
 
@@ -147,7 +152,23 @@ public class FileHandler
     // ------------------------------------------------------
     public static void openFile()
     {
-        System.out.println(showSaveFileDialog());
+        if(/*is edited*/ true)
+        {
+            if(showSaveFileDialog())
+            {
+                currentFile = getOpenFileFromChooser();
+                StringBuilder strBuild = new StringBuilder();
+
+                try(Stream<String> stream = Files.lines(currentFile.toPath(), StandardCharsets.UTF_8)){
+                    stream.forEach(s -> strBuild.append(s).append("\n"));
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                textArea.setText(strBuild.toString());
+            }
+        }
     }
 
     private static boolean showSaveFileDialog()
