@@ -1,7 +1,11 @@
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterException;
+import java.io.File;
 
 @SuppressWarnings("DuplicatedCode")
 public class MattPad extends JFrame
@@ -19,7 +23,7 @@ public class MattPad extends JFrame
     // ------------------------------------------------------
     public MattPad()
     {
-        frame = new JFrame("mattpad");
+        frame = new JFrame("");
 
         setupMenuBar();
         setupContentPane();
@@ -54,9 +58,18 @@ public class MattPad extends JFrame
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem newItem = new JMenuItem("New");
 
-        saveItem.addActionListener(e -> FileHandler.save());
-        openItem.addActionListener(e -> FileHandler.openFile());
-        newItem.addActionListener(e -> FileHandler.newFile());
+        saveItem.addActionListener(e -> {
+            FileHandler.save();
+            frame.setTitle(FileHandler.getFileName());
+        });
+        openItem.addActionListener(e -> {
+            FileHandler.openFile();
+            frame.setTitle(FileHandler.getFileName());
+        });
+        newItem.addActionListener(e -> {
+            FileHandler.newFile();
+            frame.setTitle(FileHandler.getFileName());
+        });
 
         fileMenu.add(saveItem);
         fileMenu.add(openItem);
@@ -74,23 +87,14 @@ public class MattPad extends JFrame
         JMenuItem pasteItem = new JMenuItem("Paste");
         JMenuItem printItem = new JMenuItem("Print");
 
-        cutItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        copyItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        pasteItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        printItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        cutItem.addActionListener(e -> textArea.cut());
+        copyItem.addActionListener(e -> textArea.copy());
+        pasteItem.addActionListener(e -> textArea.paste());
+        printItem.addActionListener(e -> {
+            try {
+                textArea.print();
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
             }
         });
 
@@ -129,10 +133,29 @@ public class MattPad extends JFrame
         textArea = new JTextArea(30, 40);
         textArea.setLineWrap(true);
 
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { onEdit(); }
+            public void removeUpdate(DocumentEvent e) { onEdit(); }
+            public void changedUpdate(DocumentEvent e) { onEdit(); }
+        });
+
         JScrollPane scrollPane = new JScrollPane(textArea);
 
         contentPane.add(scrollPane);
     }
+
+    private void onEdit()
+    {
+        if(FileHandler.docIsEdited())
+        {
+            frame.setTitle(FileHandler.getFileName() + " -edited");
+        }
+        else
+        {
+            frame.setTitle(FileHandler.getFileName());
+        }
+    }
+
 
     // ------------------------------------------------------
     // Main Method

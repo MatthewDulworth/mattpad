@@ -14,7 +14,9 @@ public class FileHandler
     // Member Vars
     // ------------------------------------------------------
     private static File currentFile;
+    private static String lastSaveSnapshot = "";
     private static JTextArea textArea;
+
 
     // ------------------------------------------------------
     // Save Methods
@@ -43,6 +45,7 @@ public class FileHandler
             {
                 fileWriter = new FileWriter(currentFile);
                 fileWriter.write(textArea.getText());
+                lastSaveSnapshot = textArea.getText();
             }
             catch (IOException e)
             {
@@ -70,7 +73,7 @@ public class FileHandler
 
 
     // ------------------------------------------------------
-    // Get File Dialogs
+    // GUI Methods
     // ------------------------------------------------------
     private static File getSaveFileFromChooser()
     {
@@ -86,6 +89,91 @@ public class FileHandler
             fileToSave = new File(filepath);
         }
         return fileToSave;
+    }
+
+    private static File getOpenFileFromChooser()
+    {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Open File");
+        FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("txt files (*.txt)", "txt");
+        fileChooser.setFileFilter(txtFilter);
+
+        int result = fileChooser.showOpenDialog(null);
+        File fileToOpen = null;
+
+        if(result == JFileChooser.APPROVE_OPTION)
+        {
+            fileToOpen = fileChooser.getSelectedFile();
+        }
+        return fileToOpen;
+    }
+
+    private static boolean showSaveFileDialog()
+    {
+        String[] options = {"Save","Don't Save" ,"Cancel"};
+        int input = JOptionPane.showOptionDialog(
+                null,
+                "Save work before opening new file?",
+                "Save work?",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        if(input == 0)
+        {
+            return save();
+        }
+
+        return (input == 1);
+    }
+
+
+    // ------------------------------------------------------
+    // Open File
+    // ------------------------------------------------------
+    public static void openFile()
+    {
+        // if the document has been changed since the last save
+        if(docIsEdited())
+        {
+            // if the save file dialog or the save is not canceled or closed
+            if(showSaveFileDialog())
+            {
+                openTheFile();
+            }
+        }
+        else
+        {
+            openTheFile();
+        }
+    }
+
+    private static void openTheFile()
+    {
+        // get a file from the chooser then set the working file to that;
+        currentFile = getOpenFileFromChooser();
+
+        // set the text area's content and the last save to that files contents
+        String content = readFileIntoString(currentFile);
+        textArea.setText(content);
+        lastSaveSnapshot = content;
+    }
+
+
+    // ------------------------------------------------------
+    // New File
+    // ------------------------------------------------------
+    public static void newFile(){}
+
+
+    // ------------------------------------------------------
+    // Utility
+    // ------------------------------------------------------
+    public static void setTextArea(JTextArea textArea)
+    {
+        FileHandler.textArea = textArea;
     }
 
     private static String makeFileTXT(String filename)
@@ -129,83 +217,35 @@ public class FileHandler
         }
     }
 
-    private static File getOpenFileFromChooser()
+    public static String readFileIntoString(File file)
     {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Open File");
-        FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("txt files (*.txt)", "txt");
-        fileChooser.setFileFilter(txtFilter);
+        StringBuilder strBuild = new StringBuilder();
 
-        int result = fileChooser.showOpenDialog(null);
-        File fileToOpen = null;
-
-        if(result == JFileChooser.APPROVE_OPTION)
-        {
-            fileToOpen = fileChooser.getSelectedFile();
+        try(Stream<String> stream = Files.lines(file.toPath(), StandardCharsets.UTF_8)){
+            stream.forEach(s -> strBuild.append(s).append("\n"));
         }
-        return fileToOpen;
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        return strBuild.toString();
     }
 
-
-    // ------------------------------------------------------
-    // Open File
-    // ------------------------------------------------------
-    public static void openFile()
+    public static boolean docIsEdited()
     {
-        if(/*is edited*/ true)
-        {
-            if(showSaveFileDialog())
-            {
-                currentFile = getOpenFileFromChooser();
-                StringBuilder strBuild = new StringBuilder();
+        return !textArea.getText().equals(lastSaveSnapshot);
+    }
 
-                try(Stream<String> stream = Files.lines(currentFile.toPath(), StandardCharsets.UTF_8)){
-                    stream.forEach(s -> strBuild.append(s).append("\n"));
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-                textArea.setText(strBuild.toString());
-            }
+    public static String getFileName()
+    {
+        if(currentFile != null)
+        {
+            return currentFile.getName();
+        }
+        else
+        {
+            return "";
         }
     }
 
-    private static boolean showSaveFileDialog()
-    {
-        String[] options = {"Save","Don't Save" ,"Cancel"};
-        int input = JOptionPane.showOptionDialog(
-                null,
-                "Save work before opening new file?",
-                "Save work?",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]
-        );
-        if(input == 0)
-        {
-            return save();
-        }
-
-        return (input == 1);
-    }
-
-
-    // ------------------------------------------------------
-    // New File
-    // ------------------------------------------------------
-    public static void newFile()
-    {
-
-    }
-
-    // ------------------------------------------------------
-    // Setter
-    // ------------------------------------------------------
-    public static void setTextArea(JTextArea textArea)
-    {
-        FileHandler.textArea = textArea;
-    }
 }
