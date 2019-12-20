@@ -53,7 +53,7 @@ public class MattPad
 
         setupFileMenu();
         setupEditMenu();
-        setupUndoButtons();
+        //setupUndoButtons();
 
         frame.setJMenuBar(menuBar);
     }
