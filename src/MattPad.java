@@ -2,12 +2,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.print.PrinterException;
-import java.io.File;
 
-@SuppressWarnings("DuplicatedCode")
 public class MattPad extends JFrame
 {
     // ------------------------------------------------------

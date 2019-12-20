@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.stream.Stream;
 
-@SuppressWarnings("DuplicatedCode")
+
 public class FileHandler
 {
     // ------------------------------------------------------
