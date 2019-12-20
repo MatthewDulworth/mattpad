@@ -21,7 +21,7 @@ public class FileHandler
     // ------------------------------------------------------
     // Save Methods
     // ------------------------------------------------------
-    public static boolean saveAs()
+    private static boolean saveAs()
     {
         currentFile = getSaveFileFromChooser();
         if(currentFile != null)
@@ -135,42 +135,54 @@ public class FileHandler
     // ------------------------------------------------------
     public static void openFile()
     {
-        // if the document has been changed since the last save
-        if(docIsEdited())
+        if(checkSaves())
         {
-            // if the save file dialog or the save is not canceled or closed
-            if(showSaveFileDialog())
-            {
-                openTheFile();
-            }
-        }
-        else
-        {
-            openTheFile();
+            // get a file from the chooser then set the working file to that;
+            currentFile = getOpenFileFromChooser();
+
+            // set the text area's content and the last save to that files contents
+            String content = readFileIntoString(currentFile);
+            textArea.setText(content);
+            lastSaveSnapshot = content;
         }
     }
-
-    private static void openTheFile()
-    {
-        // get a file from the chooser then set the working file to that;
-        currentFile = getOpenFileFromChooser();
-
-        // set the text area's content and the last save to that files contents
-        String content = readFileIntoString(currentFile);
-        textArea.setText(content);
-        lastSaveSnapshot = content;
-    }
-
 
     // ------------------------------------------------------
     // New File
     // ------------------------------------------------------
-    public static void newFile(){}
+    public static void newFile()
+    {
+        if(checkSaves())
+        {
+            File oldFile = currentFile;
+            if(saveAs())
+            {
+                textArea.setText("");
+            }
+            else
+            {
+                currentFile = oldFile;
+            }
+            save();
+        }
+    }
 
 
     // ------------------------------------------------------
     // Utility
     // ------------------------------------------------------
+    public static boolean checkSaves()
+    {
+        if(docIsEdited())
+        {
+            return showSaveFileDialog();
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public static void setTextArea(JTextArea textArea)
     {
         FileHandler.textArea = textArea;
