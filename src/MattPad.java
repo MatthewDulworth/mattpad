@@ -4,11 +4,9 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.print.PrinterException;
-import java.io.File;
 
-public class MattPad extends JFrame
+public class MattPad
 {
     // ------------------------------------------------------
     // Member Vars
