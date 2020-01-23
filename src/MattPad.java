@@ -192,14 +192,6 @@ public class MattPad
                     break;
                 }
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (javax.swing.UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
