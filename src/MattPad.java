@@ -129,7 +129,7 @@ public class MattPad
     private void setupContentPane()
     {
         contentPane = new JPanel();
-        contentPane.setLayout(new FlowLayout());
+        contentPane.setLayout(new BorderLayout());
 
         setupTextArea();
 
@@ -149,7 +149,7 @@ public class MattPad
 
         JScrollPane scrollPane = new JScrollPane(textArea);
 
-        contentPane.add(scrollPane);
+        contentPane.add(scrollPane, BorderLayout.CENTER);
     }
 
     private void onEdit()
