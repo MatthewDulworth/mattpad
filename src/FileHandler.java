@@ -85,7 +85,7 @@ public class FileHandler
 
         if(result == JFileChooser.APPROVE_OPTION)
         {
-            String filename = makeFileTXT(fileChooser.getSelectedFile().getName());
+            String filename = fileChooser.getSelectedFile().getName();
             String filepath = fileChooser.getSelectedFile().getParent() + '/' + filename;
             fileToSave = new File(filepath);
         }
@@ -96,9 +96,6 @@ public class FileHandler
     {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Open File");
-        FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("txt files (*.txt)", "txt");
-        fileChooser.setFileFilter(txtFilter);
-
         int result = fileChooser.showOpenDialog(parentFrame);
         File fileToOpen = null;
 
@@ -189,47 +186,6 @@ public class FileHandler
     {
         FileHandler.textArea = textArea;
         FileHandler.parentFrame = parentFrame;
-    }
-
-    private static String makeFileTXT(String filename)
-    {
-        if(filename.contains(".txt"))
-        {
-            return filename;
-        }
-        else if(filename.contains("."))
-        {
-            char[] nameArray = new char[filename.length()];
-
-            for(int i=0; i<filename.length(); i++)
-            {
-                if(filename.charAt(i) != '.')
-                {
-                    nameArray[i] = filename.charAt(i);
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            StringBuilder str = new StringBuilder();
-            for(char c: nameArray)
-            {
-                if(c != '\u0000')
-                {
-                    str.append(c);
-                }
-            }
-            str.append(".txt");
-
-            return str.toString();
-        }
-        else
-        {
-            filename = filename + (".txt");
-            return filename;
-        }
     }
 
     public static String readFileIntoString(File file)
