@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="mattpad:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/mattpad_jar</output-path>
+    <root id="archive" name="mattpad.jar">
+      <element id="module-output" name="mattpad" />
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
